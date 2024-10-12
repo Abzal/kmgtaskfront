@@ -5,10 +5,8 @@ export default {
     namespaced: true,
     state() {
         return{
-           wells: [],
-           updatedWellRows: [],
-           handbook: [],
-           selectedMatch: {'is_saved': 1}
+            token: null,
+            user: null
         }
     },
     mutations,

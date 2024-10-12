@@ -11,10 +11,11 @@
         props: {
             payload: {type: Array, default: []},
             emptyDta: {type: String, default: null},
+            defaultValue: {type: Object, default: null}
         },
         data() {
             return {
-                selected: '',
+                selected: this.defaultValue || '',
             };
         },
         computed: {
@@ -23,7 +24,9 @@
                 if (!Array.isArray(this.payload)) {
                     return []; // or return a default value
                 }
-                return [...new Set(this.payload.map((dta) => dta))];
+                const newSet = [...new Set(this.payload.map((dta) => dta))];
+
+                return newSet;
             },
         },
         methods: {

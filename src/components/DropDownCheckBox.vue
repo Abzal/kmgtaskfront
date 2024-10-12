@@ -24,7 +24,7 @@
         emits: ['checked'],
         data() {
             return {
-                selectedWells: []
+                selectedWells: [...this.payload]
             }
         },
         watch: {
