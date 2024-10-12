@@ -35,5 +35,15 @@
 </script>
 
 <style scoped>
+    select {
+        padding: 10px;
+        color: white;
+    }
+
+    select {
+        border-radius: 5px;
+        border: none;
+        background-color: #394a9e;
+    }
 
 </style>

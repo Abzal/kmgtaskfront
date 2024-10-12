@@ -9,6 +9,7 @@ import {
 export default {
     async [FETCH_WELLS_ACTION] (context){
         return await axios.get(`wells`).then(response => {
+            console.log(response.data)
             context.commit(SET_WELLS_MUTATION, response.data);
             return true;
         }).catch(error => {

@@ -1,43 +1,48 @@
 <template>
     <div>
-        <h1>Таблица Скважин</h1>
         <table class="custom-table">
             <thead>
             <tr>
                 <th>
-                    <drop-down
-                            :payload="[{id: 1, name: 'сохранено'},{id: 0, name: 'не сохранено'}]"
-                            @choosen="(id) => fillSelectedMatch('is_saved', id)"
-                    />
-                </th>
-                <th>
-                    <drop-down
-                            :payload="handbook['fields']"
-                            empty-dta="Выберите месторождение"
-                            @choosen="(id) => fillSelectedMatch('field_id', id)"
-                    />
+                    Месторождение
                 </th>
                 <th>
                     Скважина
                 </th>
                 <th>
-                    <drop-down
-                            :payload="handbook['wellTypes']"
-                            empty-dta="Выберите тип скв"
-                    />
+                    Тип скважины
                 </th>
                 <th>
-                    <drop-down :payload="handbook['wellStatuses']" empty-dta="Выберите состояние"></drop-down>
+                    Состояние скважины
+                </th>
+                <th>
+                    Горизонт
+                </th>
+                <th>
+                    Q жидкости
+                </th>
+                <th>
+                    Обводненность
+                </th>
+                <th>
+                    Плотность нефти
+                </th>
+                <th>
+                    Дебит нефти
                 </th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="well in filteredWells" :key="well.id">
-                <td></td>
                 <td>{{ well.field.name }}</td>
                 <td>{{ well.well_number }}</td>
-                <td>{{ well.well_type }}</td>
-                <td>{{ well.status }}</td>
+                <td>{{ well.well_type.name }}</td>
+                <td>{{ well.well_status.name }}</td>
+                <td>{{ well.horizon.name }}</td>
+                <td>{{well.liquid_flow || ''}}</td>
+                <td>{{well.water_cut || ''}}</td>
+                <td>{{well.oil_density || ''}}</td>
+                <td>{{well.oil_rate || ''}}</td>
             </tr>
             </tbody>
         </table>
@@ -46,55 +51,38 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
-    import {
-        FETCH_HANDBOOK_ACTION,
-        FETCH_WELLS_ACTION,
-        GET_HANDBOOK_GETTER,
-        GET_WELLS_GETTER
-    } from '@/store/storeconstants';
-    import DropDown from "@/components/DropDown";
+    import {mapGetters } from 'vuex';
+    import {GET_WELLS_GETTER} from '@/store/storeconstants';
 
     export default {
-        components: {DropDown},
-        data() {
-            return {
-                selectedMatch: {},
-            };
-        },
+        props: ['selectedMatch'],
         computed: {
             ...mapGetters('wells', {
-                wells: GET_WELLS_GETTER,
-                handbook: GET_HANDBOOK_GETTER
+                wells: GET_WELLS_GETTER
             }),
 
             filteredWells() {
                 if (!Array.isArray(this.wells)) {
                     return [];
                 }
+
                 return this.wells.filter((well) => {
                     // Iterate over all properties in selectedMatch
                     return Object.keys(this.selectedMatch).every((key) => {
-                        // If the key exists in both well and selectedMatch, compare their values
-                        return this.selectedMatch[key] ? well[key] === this.selectedMatch[key] : true;
+                        const selectedValue = this.selectedMatch[key];
+                        const wellValue = well[key];
+
+                        // Check if the selected value is an array (e.g., for well_number)
+                        if (Array.isArray(selectedValue)) {
+                            // For arrays, check if wellValue exists in selectedValue array
+                            return selectedValue.includes(wellValue);
+                        } else {
+                            // Otherwise, compare the values directly
+                            return selectedValue ? wellValue === selectedValue : true;
+                        }
                     });
                 });
-            },
-        },
-
-        methods: {
-            ...mapActions('wells', {
-                fetchWells: FETCH_WELLS_ACTION,
-                fetchHandBook: FETCH_HANDBOOK_ACTION
-            }),
-
-            fillSelectedMatch(key, value){
-                    this.selectedMatch[key] = value;
             }
-        },
-        mounted() {
-            this.fetchWells();
-            this.fetchHandBook();
         },
     };
 </script>
