@@ -17,7 +17,6 @@ export default {
             context.commit(SET_TOKEN_MUTATION, response.data.token);
             context.commit(SET_USER_MUTATION, response.data.user);
             axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.token}`};
-            this.commit('addSuccess', response.data.token);
             return true;
         }).catch(error => {
             console.log(error)

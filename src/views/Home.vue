@@ -4,7 +4,7 @@
         <button @click="logout" class="logout-button">Выход ({{user?.email}})</button>
     </header>
     <div>
-        <well-filter @load="load" @reinitiate="load" @save="save"/>
+        <well-filter @load="load" @save-changes="saveChanges" @save="save" @unsave="unsave"/>
         <well-table />
     </div>
 </template>
@@ -16,8 +16,8 @@
         FETCH_HANDBOOK_ACTION, FETCH_WELL_NUMBERS_ACTION,
         FETCH_WELLS_ACTION, GET_SELECTED_MATCH_GETTER,
         GET_USER_GETTER,
-        LOGOUT_ACTION, MULTIPLE_UPDATE_WELLS_ACTION, SET_SELECTED_MATCH_MUTATION,
-        SET_UPDATED_WELLS_ROW_MUTATION, SET_WELLS_MUTATION
+        LOGOUT_ACTION, MULTIPLE_UPDATE_WELLS_ACTION, SAVE_WELLS_ACTION, SET_SELECTED_MATCH_MUTATION,
+        SET_UPDATED_WELLS_ROW_MUTATION, SET_WELLS_MUTATION, UNSAVE_WELLS_ACTION
     } from "@/store/storeconstants";
     import WellFilter from "@/components/WellFilter";
     export default {
@@ -51,7 +51,9 @@
                 fetchWells: FETCH_WELLS_ACTION,
                 fetchHandBook: FETCH_HANDBOOK_ACTION,
                 fetchWellNumbers: FETCH_WELL_NUMBERS_ACTION,
-                multipleUpdate: MULTIPLE_UPDATE_WELLS_ACTION
+                multipleUpdate: MULTIPLE_UPDATE_WELLS_ACTION,
+                saveWells: SAVE_WELLS_ACTION,
+                unsaveWells: UNSAVE_WELLS_ACTION
             }),
             ...mapMutations('wells', {
                 setUpdatedWellRows: SET_UPDATED_WELLS_ROW_MUTATION,
@@ -67,20 +69,34 @@
                         this.$router.push({name: 'login'}); // Redirect to login page after logout
                 })
             },
-            initPageData(){
-                this.fetchWells();
-                this.setUpdatedWellRows();
-                this.setSelectedMatch();
-            },
             load(){
                 this.fetchWells();
                 this.setUpdatedWellRows();
             },
+            saveChanges(){
+                this.multipleUpdate().then(res => {
+                    if(res)
+                        this.load();
+                })
+            },
             save(){
                 this.multipleUpdate().then(res => {
                     if(res)
-                    this.load();
+                        this.saveWells().then(res => {
+                            if(res){
+                                this.fetchWellNumbers();
+                                this.load();
+                            }
+                        });
                 })
+            },
+            unsave(){
+                this.unsaveWells().then(res => {
+                    if(res){
+                        this.fetchWellNumbers();
+                        this.load();
+                    }
+                });
             }
         },
         mounted() {

@@ -1,28 +1,45 @@
 import axios from "@/services/axios";
 import {
-    FETCH_HANDBOOK_ACTION, FETCH_WELL_NUMBERS_ACTION,
-    FETCH_WELLS_ACTION, GET_SELECTED_MATCH_GETTER, GET_UPDATED_WELLS_ROW_GETTER, MULTIPLE_UPDATE_WELLS_ACTION,
-    SET_HANDBOOK_MUTATION, SET_WELL_NUMBERS_MUTATION,
-    SET_WELLS_MUTATION, TOGGLE_WELLS_SAVE_STATUS_ACTION
+    FETCH_HANDBOOK_ACTION,
+    FETCH_WELL_NUMBERS_ACTION,
+    FETCH_WELLS_ACTION,
+    GET_SELECTED_MATCH_GETTER,
+    GET_UPDATED_WELLS_ROW_GETTER,
+    MULTIPLE_UPDATE_WELLS_ACTION,
+    SAVE_WELLS_ACTION,
+    SET_HANDBOOK_MUTATION,
+    SET_WELL_NUMBERS_MUTATION,
+    SET_WELLS_MUTATION, UNSAVE_WELLS_ACTION,
 } from "@/store/storeconstants";
 
 export default {
-    async [TOGGLE_WELLS_SAVE_STATUS_ACTION](context){
-        axios.patch('/wells/toggle-save', {
-            well_ids: []
-        })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error(error.response.data);
-            });
+
+    async [SAVE_WELLS_ACTION](context){
+        return axios.patch('/wells/save', {
+            well_numbers: [...context.getters[GET_SELECTED_MATCH_GETTER]['well_number']]
+        }).then(response => {
+            this.commit('addSuccess', response.data?.message);
+            return true;
+        }).catch(error => {
+            this.commit('addError', error.response?.data?.message);
+            return false;
+        });
+    },
+
+    async [UNSAVE_WELLS_ACTION](context){
+        return axios.patch('/wells/unsave', {
+            well_numbers: [...context.getters[GET_SELECTED_MATCH_GETTER]['well_number']]
+        }).then(response => {
+            this.commit('addSuccess', response.data?.message);
+            return true;
+        }).catch(error => {
+            this.commit('addError', error.response?.data?.message);
+            return false;
+        });
     },
 
     async [MULTIPLE_UPDATE_WELLS_ACTION](context){
         const updatedWells = context.getters[GET_UPDATED_WELLS_ROW_GETTER];
-
-        console.log(updatedWells)
         return axios.put('/wells', {
                     wells: [...updatedWells]
                 }).then(response => {
@@ -37,7 +54,6 @@ export default {
     async [FETCH_WELLS_ACTION](context) {
         const matches = context.getters[GET_SELECTED_MATCH_GETTER];
 
-        // Initialize params object
         const params = {};
 
         // Conditionally add parameters based on their existence in matches and non-emptiness

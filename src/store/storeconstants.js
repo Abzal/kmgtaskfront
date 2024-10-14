@@ -14,7 +14,8 @@ export const SET_UPDATED_WELLS_ROW_MUTATION = '[mutation] set updated wells row'
 export const GET_UPDATED_WELLS_ROW_GETTER = '[getter] get updated wells row';
 export const FETCH_WELLS_ACTION = '[action] fetch all wells';
 export const MULTIPLE_UPDATE_WELLS_ACTION = '[action] multiple update wells';
-export const TOGGLE_WELLS_SAVE_STATUS_ACTION = '[action] toggle save status';
+export const SAVE_WELLS_ACTION = '[action] save wells';
+export const UNSAVE_WELLS_ACTION = '[action] unsave wells';
 
 export const FETCH_WELL_NUMBERS_ACTION = '[action] well numbers by saved status';
 export const SET_WELL_NUMBERS_MUTATION = '[mutation] set well numbers';

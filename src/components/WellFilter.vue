@@ -40,10 +40,10 @@
             <span @click="$emit('load')">
             + Показать
             </span>
-            <span @click="$emit('reinitiate')" v-if="hasUpdates">&times; Отмена</span>
-            <span v-if="isSaved && hasUpdates" @click="$emit('save')">&#10003; Сохранить изменения</span>
-            <span v-if="!isSaved">&#10003; Сохранить</span>
-            <span v-if="isSaved">&times; Удалить</span>
+            <span @click="$emit('load')" v-if="hasUpdates">&times; Отмена</span>
+            <span v-if="isSaved && hasUpdates" @click="$emit('save-changes')">&#10003; Сохранить изменения</span>
+            <span v-if="!isSaved && hasSelectedWells" @click="$emit('save')">&#10003; Сохранить</span>
+            <span v-if="isSaved && hasSelectedWells" @click="$emit('unsave')">&times; Удалить</span>
         </div>
 
 
@@ -84,6 +84,10 @@
 
             isSaved() {
                 return this.selectedMatch['is_saved'] === 1;
+            },
+
+            hasSelectedWells(){
+                return this.selectedMatch['well_number'] && this.selectedMatch['well_number'].length > 0;
             },
 
             hasUpdates() {
