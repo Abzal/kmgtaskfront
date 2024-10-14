@@ -33,9 +33,6 @@
                 @checked="value => setSelectedMatch({'key' : 'well_number', 'value' : value})"
         />
 
-        <!-- Show button -->
-
-
         <div class="action-box">
             <span @click="$emit('load')">
             + Показать
@@ -45,7 +42,6 @@
             <span v-if="!isSaved && hasSelectedWells" @click="$emit('save')">&#10003; Сохранить</span>
             <span v-if="isSaved && hasSelectedWells" @click="$emit('unsave')">&times; Удалить</span>
         </div>
-
 
     </div>
 </template>

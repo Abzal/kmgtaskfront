@@ -23,7 +23,7 @@
             },
             options: {
                 type: Array,
-                required: true, // Array of options {id, name}
+                required: true,
             },
             placeholder: {
                 type: String,
@@ -33,7 +33,7 @@
         data() {
             return {
                 isEditing: false,
-                localValue: this.modelValue, // Track selected value locally
+                localValue: this.modelValue,
             };
         },
         computed: {
@@ -52,7 +52,7 @@
             saveEdit() {
                 this.isEditing = false;
                 this.$emit('update:modelValue', this.localValue);
-                this.$emit('saved', this.localValue); // Emit the updated value to parent
+                this.$emit('saved', this.localValue);
             },
         },
         watch: {

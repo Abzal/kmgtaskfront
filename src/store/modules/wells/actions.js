@@ -56,7 +56,7 @@ export default {
 
         const params = {};
 
-        // Conditionally add parameters based on their existence in matches and non-emptiness
+        /*Conditionally add parameters based on their existence in matches and non-emptiness*/
         if (matches.well_number && matches.well_number.length > 0) params.well_number = matches.well_number;  // Ensure well_number is a non-empty array
         else {this.commit('addInfo', 'Выберите скважины'); return;}
         if (matches.field_id) params.field_id = matches.field_id;

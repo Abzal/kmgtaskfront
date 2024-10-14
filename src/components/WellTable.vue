@@ -129,18 +129,18 @@
             calculateAndRound(well) {
                 const coefficient = this.findCoefficientById(well.horizon_id);
                 if (coefficient === null) {
-                    return 0; // Handle case where coefficient is not found
+                    return 0;
                 }
 
                 const result = well.liquid_flow * (1 - well.water_cut / 100) * well.oil_density * coefficient;
-                return Math.ceil(result * 100) / 100; // Rounded to the nearest integer
+                return Math.ceil(result * 100) / 100;
             },
 
             findCoefficientById(id) {
                 if(!this.handbook['horizons'])
                     return 1;
                 const item = this.handbook['horizons'].find(el => el.id === id);
-                return item ? item.coefficient : 0; // Return the coefficient or null if not found
+                return item ? item.coefficient : 0;
             },
 
             setEditing(index, field) {

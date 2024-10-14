@@ -20,7 +20,7 @@ export default {
 
     [SET_UPDATED_WELLS_ROW_MUTATION](state, editedWell = null){
         if(editedWell){
-            // Add or update the edited row in array
+            /* Add or update the edited row in array*/
             const existingIndex = state.updatedWellRows.findIndex(row => row.id === editedWell.id);
             if (existingIndex !== -1) {
                 state.updatedWellRows[existingIndex] = editedWell;

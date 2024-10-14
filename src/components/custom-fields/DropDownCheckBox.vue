@@ -33,7 +33,6 @@
             }
         },
         watch: {
-            // Watch for changes in the payload and reset selectedWells
             payload: {
                 handler(newPayload) {
                     this.selectedWells = [];
@@ -44,11 +43,9 @@
         },
         methods: {
             handleCheckboxChange(well_number) {
-                // If the well_number is already in the selectedWells, remove it
                 if (this.selectedWells.includes(well_number)) {
                     this.selectedWells = this.selectedWells.filter(well => well !== well_number);
                 }
-                // Check if the limit is reached
                 else if (this.selectedWells.length < 5) {
                     this.selectedWells.push(well_number);
                 }
