@@ -5,9 +5,13 @@ import auth from './modules/auth'
 export default createStore({
   state: {
     messages: [],
+    loading: false
   },
-  getters: {},
+  getters: {isLoading: (state) => state.loading,},
   mutations: {
+    setLoading(state, payload) {
+      state.loading = payload;
+    },
     addError(state, message) {
       this.commit('addMessage', { message: message, type: 'error' });
     },
@@ -33,7 +37,14 @@ export default createStore({
       state.messages = state.messages.filter(msg => msg.id !== messageId);
     },
   },
-  actions: {},
+  actions: {
+    showLoader({ commit }) {
+      commit('setLoading', true);
+    },
+    hideLoader({ commit }) {
+      commit('setLoading', false);
+    },
+  },
   modules: {
     wells,
     auth

@@ -1,15 +1,18 @@
 <template>
   <div class="app-container">
+    <global-loader/>
     <Toast />
     <router-view />
   </div>
 </template>
 
 <script>
-import Toast from "@/components/Toast";
+import Toast from "@/components/modal/Toast";
+import GlobalLoader from "@/components/GlobalLoading";
 export default {
   name: 'App',
   components: {
+    GlobalLoader,
     Toast
   }
 }

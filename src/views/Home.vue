@@ -4,15 +4,21 @@
         <button @click="logout" class="logout-button">Выход ({{user?.email}})</button>
     </header>
     <div>
-        <well-filter />
+        <well-filter @load="load" @reinitiate="load" @save="save"/>
         <well-table />
     </div>
 </template>
 
 <script>
     import WellTable from "@/components/WellTable";
-    import {mapActions, mapGetters} from "vuex";
-    import {FETCH_HANDBOOK_ACTION, FETCH_WELLS_ACTION, GET_USER_GETTER, LOGOUT_ACTION} from "@/store/storeconstants";
+    import {mapActions, mapGetters, mapMutations} from "vuex";
+    import {
+        FETCH_HANDBOOK_ACTION, FETCH_WELL_NUMBERS_ACTION,
+        FETCH_WELLS_ACTION, GET_SELECTED_MATCH_GETTER,
+        GET_USER_GETTER,
+        LOGOUT_ACTION, MULTIPLE_UPDATE_WELLS_ACTION, SET_SELECTED_MATCH_MUTATION,
+        SET_UPDATED_WELLS_ROW_MUTATION, SET_WELLS_MUTATION
+    } from "@/store/storeconstants";
     import WellFilter from "@/components/WellFilter";
     export default {
         name: "Home",
@@ -22,11 +28,35 @@
             ...mapGetters('auth', {
                 user: GET_USER_GETTER
             }),
+            ...mapGetters('wells', {
+                selectedMatch: GET_SELECTED_MATCH_GETTER
+            }),
+        },
+        watch: {
+            'selectedMatch.is_saved': {
+                handler(newValue) {
+                    this.fetchWellNumbers().then(res => {
+                        if(res){
+                            this.setSelectedMatch();
+                            this.setSelectedMatch({key: 'is_saved', value: newValue});
+                            this.setWells([]);
+                        }
+                    });
+
+                },
+            }
         },
         methods: {
             ...mapActions('wells', {
                 fetchWells: FETCH_WELLS_ACTION,
-                fetchHandBook: FETCH_HANDBOOK_ACTION
+                fetchHandBook: FETCH_HANDBOOK_ACTION,
+                fetchWellNumbers: FETCH_WELL_NUMBERS_ACTION,
+                multipleUpdate: MULTIPLE_UPDATE_WELLS_ACTION
+            }),
+            ...mapMutations('wells', {
+                setUpdatedWellRows: SET_UPDATED_WELLS_ROW_MUTATION,
+                setSelectedMatch: SET_SELECTED_MATCH_MUTATION,
+                setWells: SET_WELLS_MUTATION
             }),
             ...mapActions('auth', {
                logoutAction: LOGOUT_ACTION
@@ -36,10 +66,25 @@
                     if (res)
                         this.$router.push({name: 'login'}); // Redirect to login page after logout
                 })
+            },
+            initPageData(){
+                this.fetchWells();
+                this.setUpdatedWellRows();
+                this.setSelectedMatch();
+            },
+            load(){
+                this.fetchWells();
+                this.setUpdatedWellRows();
+            },
+            save(){
+                this.multipleUpdate().then(res => {
+                    if(res)
+                    this.load();
+                })
             }
         },
         mounted() {
-            this.fetchWells();
+            this.fetchWellNumbers();
             this.fetchHandBook();
         },
     }

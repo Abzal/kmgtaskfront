@@ -17,17 +17,6 @@
         name: "PieChart",
         components: { Pie },
         props: ['chartData', 'chartOptions'],
-
-
-        watch: {
-            payload: {
-                handler() {
-                    this.chartData = this.getChartData(); // Update chart data when payload changes
-                    this.chartOptions.plugins.title.text = `Total Oil Rate: ${this.getTotalOilRate()}`; // Update total in chart options
-                },
-                deep: true // Watch for changes in the payload object
-            }
-        }
     }
 </script>
 

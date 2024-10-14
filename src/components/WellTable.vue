@@ -81,8 +81,8 @@
         GET_WELLS_GETTER,
         SET_UPDATED_WELLS_ROW_MUTATION
     } from '@/store/storeconstants';
-    import EditableSelectField from "@/components/EditableSelectField";
-    import WellChart from "@/components/chart/WellChart";
+    import EditableSelectField from "@/components/custom-fields/EditableSelectField";
+    import WellChart from "@/components/chart/WellCharts";
 
     export default {
         components: {WellChart, EditableSelectField},
@@ -155,7 +155,7 @@
             saveChanges(index, field) {
                 this.stopEditing();
 
-                const editedWell = this.filteredWells[index];
+                let editedWell = this.filteredWells[index];
 
                 this.filteredWells[index]['oil_rate'] = this.calculateAndRound(this.filteredWells[index])
 

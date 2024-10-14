@@ -51,6 +51,7 @@
             },
             saveEdit() {
                 this.isEditing = false;
+                this.$emit('update:modelValue', this.localValue);
                 this.$emit('saved', this.localValue); // Emit the updated value to parent
             },
         },

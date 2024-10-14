@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex; justify-content: space-between">
+    <div v-if="isEmpty" style="display: flex; justify-content: space-between">
         <bar-chart :chart-data="barChartData" :chart-options="barChartOptions"/>
         <pie-chart :chart-data="pieChartData" :chart-options="pieChartOptions"/>
     </div>
@@ -23,12 +23,19 @@
             }
         },
 
+        computed: {
+            isEmpty(){
+                return this.payload && this.payload.length > 0
+            },
+        },
         watch: {
+
             payload: {
                 handler() {
                     // Update chart data when payload changes
                     this.barChartData = this.getBarChartData();
                     this.pieChartData = this.getPieChartData();
+                    this.pieChartOptions.plugins.title.text = `Общий дебит нефти: ${this.getTotalOilRate()}`; // Update total in pie chart options
                 },
                 deep: true
             }

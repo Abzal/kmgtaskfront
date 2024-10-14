@@ -8,6 +8,7 @@ export default {
            wells: [],
            updatedWellRows: [],
            handbook: [],
+           wellNumbers: [],
            selectedMatch: {'is_saved': 1}
         }
     },
